@@ -143,7 +143,12 @@ window.addEventListener('resize', () =>
     sizes.height = window.innerHeight
 
     // Update camera
-    camera.aspect = sizes.width / sizes.height
+    const aspect = sizes.width / sizes.height
+    camera.left = -aspect * 3
+    camera.right = aspect * 3
+    camera.top = 3
+    camera.bottom = -3
+
     camera.updateProjectionMatrix()
 
     // Update renderer
@@ -154,15 +159,20 @@ window.addEventListener('resize', () =>
 /**
  * Camera
  */
-// Perspictive camera
-const camera = new THREE.PerspectiveCamera(35, sizes.width / sizes.height, 0.1, 1000)
-camera.position.x = 4
-camera.position.y = 4
+// Orthographic camera
+const aspect = sizes.width / sizes.height;
+const camera = new THREE.OrthographicCamera(
+  -aspect * 3,
+  aspect * 3,
+  3,
+  -3,
+  1,
+  1000
+);
+camera.position.x = 3.7
+camera.position.y = 4.3
 camera.position.z = 4
 scene.add(camera)
-
-// Orthographic camera
-// const camera = new THREE.OrthographicCamera( width / - 2, width / 2, height / 2, height / - 2, 1, 1000 );
 
 gui.add(camera.position, 'x').min(-5).max(5).step(0.01).name('cameraX')
 gui.add(camera.position, 'y').min(-5).max(5).step(0.01).name('cameraY')
