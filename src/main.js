@@ -17,6 +17,7 @@ import waterFragmentShader from './shaders/water/fragment.glsl'
 const gui = new GUI({
   width: 400
 })
+const debugObject = {}
 
 // Canvas
 const canvas = document.querySelector('canvas.webgl')
@@ -112,16 +113,53 @@ gltfLoader.load(
     }
 )
 
-// // water plane
-// const waterGeometry = new THREE.PlaneGeometry(20, 20, 128, 128)
-// const waterMaterial = new THREE.ShaderMaterial()
-// const water = new THREE.Mesh(waterGeometry, waterMaterial)
+// water plane
+const waterGeometry = new THREE.PlaneGeometry(20, 20, 128, 128)
 
-// water.rotation.x = - Math.PI / 2
-// water.position.y = -1.05
-// scene.add(water)
+// water color
+debugObject.depthColor = '#517ec4'
+debugObject.surfaceColor = '#80CCCC'
 
-// gui.add(water.position, 'y').min(-5).max(5).step(0.01).name('waterHeight')
+
+const waterMaterial = new THREE.ShaderMaterial({
+    vertexShader: waterVertexShader,
+    fragmentShader:  waterFragmentShader,
+    uniforms:
+    {
+        uTime: { value: 0 },
+        uBigWavesElevation: { value: 0.05 },
+        uBigWavesFrequency: { value: new THREE.Vector2(0.7, 0.8) },
+        uBigWavesSpeed: { value: 0.7 },
+
+        // color
+        uDepthColor: { value: new THREE.Color(debugObject.depthColor) },
+        uSurfaceColor: { value: new THREE.Color(debugObject.surfaceColor) },
+        uColorOffset: { value: 0.03 },
+        uColorMultiplier: { value: 1.5 }
+    }
+})
+
+
+
+const water = new THREE.Mesh(waterGeometry, waterMaterial)
+
+water.rotation.x = - Math.PI / 2
+water.position.y = -1.05
+scene.add(water)
+
+// Water debug
+gui.add(water.position, 'y').min(-5).max(5).step(0.01).name('waterHeight')
+
+gui.add(waterMaterial.uniforms.uBigWavesElevation, 'value').min(0).max(1).step(0.001).name('uBigWavesElevation')
+gui.add(waterMaterial.uniforms.uBigWavesFrequency.value, 'x').min(0).max(10).step(0.001).name('uBigWavesFrequencyX')
+gui.add(waterMaterial.uniforms.uBigWavesFrequency.value, 'y').min(0).max(10).step(0.001).name('uBigWavesFrequencyY')
+gui.add(waterMaterial.uniforms.uBigWavesSpeed, 'value').min(0).max(5).step(0.001).name('uBigWavesSpeed')
+
+gui.addColor(debugObject, 'depthColor').onChange(() => { waterMaterial.uniforms.uDepthColor.value.set(debugObject.depthColor) })
+gui.addColor(debugObject, 'surfaceColor').onChange(() => { waterMaterial.uniforms.uSurfaceColor.value.set(debugObject.surfaceColor) })
+
+gui.add(waterMaterial.uniforms.uColorOffset, 'value').min(0).max(1).step(0.001).name('uColorOffset')
+gui.add(waterMaterial.uniforms.uColorMultiplier, 'value').min(0).max(10).step(0.001).name('uColorMultiplier')
 
 /**
  * Light
@@ -174,9 +212,10 @@ camera.position.y = 4.3
 camera.position.z = 4
 scene.add(camera)
 
-gui.add(camera.position, 'x').min(-5).max(5).step(0.01).name('cameraX')
-gui.add(camera.position, 'y').min(-5).max(5).step(0.01).name('cameraY')
-gui.add(camera.position, 'z').min(-5).max(5).step(0.01).name('cameraZ')
+// Camera position debug
+// gui.add(camera.position, 'x').min(-5).max(5).step(0.01).name('cameraX')
+// gui.add(camera.position, 'y').min(-5).max(5).step(0.01).name('cameraY')
+// gui.add(camera.position, 'z').min(-5).max(5).step(0.01).name('cameraZ')
 
 // Controls
 const controls = new OrbitControls(camera, canvas);
@@ -239,7 +278,7 @@ gui.add( skyParameters, 'mieCoefficient', 0.0, 0.1, 0.001 ).onChange( updateSky 
 gui.add( skyParameters, 'mieDirectionalG', 0.0, 1, 0.001 ).onChange( updateSky );
 gui.add( skyParameters, 'elevation', 0, 90, 0.1 ).onChange( updateSky );
 gui.add( skyParameters, 'azimuth', - 180, 180, 0.1 ).onChange( updateSky );
-gui.add( skyParameters, 'exposure', 0, 1, 0.0001 ).onChange( updateSky );
+// gui.add( skyParameters, 'exposure', 0, 1, 0.0001 ).onChange( updateSky );
 
 updateSky();
 
@@ -251,6 +290,9 @@ const clock = new THREE.Clock()
 const tick = () =>
 {
     const elapsedTime = clock.getElapsedTime()
+
+    // update water
+    waterMaterial.uniforms.uTime.value = elapsedTime
 
     // Update controls
     controls.update()
