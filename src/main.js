@@ -117,7 +117,7 @@ gltfLoader.load(
 const waterGeometry = new THREE.PlaneGeometry(20, 20, 128, 128)
 
 // water color
-debugObject.depthColor = '#517ec4'
+debugObject.depthColor = '#70b0cf'
 debugObject.surfaceColor = '#80CCCC'
 
 
@@ -127,7 +127,7 @@ const waterMaterial = new THREE.ShaderMaterial({
     uniforms:
     {
         uTime: { value: 0 },
-        uBigWavesElevation: { value: 0.05 },
+        uBigWavesElevation: { value: 0.15 },
         uBigWavesFrequency: { value: new THREE.Vector2(0.7, 0.8) },
         uBigWavesSpeed: { value: 0.7 },
 
@@ -135,7 +135,7 @@ const waterMaterial = new THREE.ShaderMaterial({
         uDepthColor: { value: new THREE.Color(debugObject.depthColor) },
         uSurfaceColor: { value: new THREE.Color(debugObject.surfaceColor) },
         uColorOffset: { value: 0.03 },
-        uColorMultiplier: { value: 1.5 }
+        uColorMultiplier: { value: 1.5 },
     }
 })
 
