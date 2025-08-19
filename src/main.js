@@ -58,8 +58,8 @@ const textureMap = {
         day: "/textures/day/other_baked.jpg",
         night: ""
     },
-    Ground: {
-        day: "/textures/day/ground_baked.jpg",
+    Flower: {
+        day: "/textures/day/flower_baked.jpg",
         night: ""
     }
 }
@@ -80,6 +80,9 @@ Object.entries(textureMap).forEach(([key, paths]) => {
     dayTexture.colorSpace = THREE.SRGBColorSpace
     loadedTextures.night[key] = nightTexture;
 })
+
+// Emission material
+const emissionMaterial = new THREE.MeshBasicMaterial({ color: 0xffffe5 })
 
 /**
  * Model
@@ -106,6 +109,12 @@ gltfLoader.load(
                 })
             }
         })
+
+        const lighthouseEmission1 = gltf.scene.children.find(child => child.name === 'lighthouse_top_emission')
+        const lighthouseEmission2 = gltf.scene.children.find(child => child.name === 'lighthouse_window_emission')  
+
+        lighthouseEmission1.material = emissionMaterial
+        lighthouseEmission2.material = emissionMaterial
 
         gltf.scene.scale.set(0.3, 0.3, 0.3)
         gltf.scene.position.set(0, -1, 0)
