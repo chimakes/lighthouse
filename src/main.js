@@ -43,23 +43,19 @@ gltfLoader.setDRACOLoader(dracoLoader)
  */
 const textureMap = {
     LightHouse: {
-        day: "/textures/day/lighthouse_baked.jpg",
+        day: "/textures/day/lighthouse_day.jpg",
         night: ""
     },
     Mainisland: {
-        day: "/textures/day/main_island_baked.jpg",
+        day: "/textures/day/main_island_day.jpg",
         night: ""
     },
     Animal: {
-        day: "/textures/day/animal_baked.jpg",
+        day: "/textures/day/animal_day.jpg",
         night: ""
     },
     Other: {
-        day: "/textures/day/other_baked.jpg",
-        night: ""
-    },
-    Flower: {
-        day: "/textures/day/flower_baked.jpg",
+        day: "/textures/day/other_day.jpg",
         night: ""
     }
 }
@@ -88,8 +84,7 @@ const emissionMaterial = new THREE.MeshBasicMaterial({ color: 0xffffe5 })
  * Model
  */
 gltfLoader.load(
-    // '/models/lighthouse.glb',
-    '/models/lighthouse_nobg.glb',
+    '/models/lighthouse.glb',
     (gltf) =>
     {
         gltf.scene.traverse((child) => {
