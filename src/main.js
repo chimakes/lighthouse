@@ -15,7 +15,7 @@ import waterFragmentShader from './shaders/water/fragment.glsl'
  */
 // Debug
 const gui = new GUI({
-  width: 400
+    width: 400
 })
 const debugObject = {}
 
@@ -35,12 +35,12 @@ const cubeTextureLoader = new THREE.CubeTextureLoader()
  * Environment map
  */
 const environmentMap = cubeTextureLoader.load([
-  '/environmentMaps/px.png', // positive x
-  '/environmentMaps/nx.png', // negative x 
-  '/environmentMaps/py.png', // positive y
-  '/environmentMaps/ny.png', // negative y
-  '/environmentMaps/pz.png', // positive z
-  '/environmentMaps/nz.png'  // negative z
+    '/environmentMaps/px.png', // positive x
+    '/environmentMaps/nx.png', // negative x 
+    '/environmentMaps/py.png', // positive y
+    '/environmentMaps/ny.png', // negative y
+    '/environmentMaps/pz.png', // positive z
+    '/environmentMaps/nz.png'  // negative z
 ]);
 
 environmentMap.encoding = THREE.sRGBEncoding;
@@ -103,19 +103,18 @@ const emissionMaterial = new THREE.MeshBasicMaterial({ color: 0xffffe5 })
  */
 gltfLoader.load(
     '/models/lighthouse.glb',
-    (gltf) =>
-    {
+    (gltf) => {
         gltf.scene.traverse((child) => {
-            if(child.isMesh){
-                Object.keys(textureMap).forEach(key=>{
-                    
-                    if(child.name.includes(key)){
+            if (child.isMesh) {
+                Object.keys(textureMap).forEach(key => {
+
+                    if (child.name.includes(key)) {
                         const material = new THREE.MeshBasicMaterial({
                             map: loadedTextures.day[key]
                         })
                         child.material = material
 
-                        if(child.material.map){
+                        if (child.material.map) {
                             child.material.map.minFilter = THREE.LinearFilter
                         }
                     }
@@ -124,7 +123,7 @@ gltfLoader.load(
         })
 
         const lighthouseEmission1 = gltf.scene.children.find(child => child.name === 'lighthouse_top_emission')
-        const lighthouseEmission2 = gltf.scene.children.find(child => child.name === 'lighthouse_window_emission')  
+        const lighthouseEmission2 = gltf.scene.children.find(child => child.name === 'lighthouse_window_emission')
 
         lighthouseEmission1.material = emissionMaterial
         lighthouseEmission2.material = emissionMaterial
@@ -146,30 +145,29 @@ debugObject.peakColor = '#bbd8e0'
 
 const waterMaterial = new THREE.ShaderMaterial({
     vertexShader: waterVertexShader,
-    fragmentShader:  waterFragmentShader,
-    transparent:true,
+    fragmentShader: waterFragmentShader,
+    transparent: true,
     uniforms:
     {
         uTime: { value: 0.0 },
-        // uEnvironmentMap: { value: options.environmentMap },
 
-        uOpacity: { value: 0.8 },
+        uOpacity: { value: 0.5 },
 
         uTroughColor: { value: new THREE.Color('#186691') },
-        uSurfaceColor: { value: new THREE.Color('#9bd8c0') },
+        uSurfaceColor: { value: new THREE.Color(1, 0, 0) },
         uPeakColor: { value: new THREE.Color('#bbd8e0') },
 
-        uWavesAmplitude: { value: 0.3 },
-        uWavesFrequency: { value: 0.9 },
+        uWavesAmplitude: { value: 0.05 },
+        uWavesFrequency: { value: 0.3 },
         uWavesPersistence: { value: 0.3 },
         uWavesLacunarity: { value: 2.0 },
-        uWavesIterations: { value: 5 },
-        uWavesSpeed: { value: .35 },
+        uWavesIterations: { value: 6 },
+        uWavesSpeed: { value: 0.3 },
 
-        uTroughThreshold:{ value: -0.01 },
-        uTroughTransition:{ value: 0.12 },
-        uPeakThreshold:{ value: 0.08 },
-        uPeakTransition:{ value: 0.06 },
+        uTroughThreshold: { value: -0.01 },
+        uTroughTransition: { value: 0.12 },
+        uPeakThreshold: { value: 0.08 },
+        uPeakTransition: { value: 0.06 },
 
         uFresnelStrength: { value: 0.5 },
         uFresnelPower: { value: 1.3 }
@@ -222,8 +220,7 @@ const sizes = {
     height: window.innerHeight
 }
 
-window.addEventListener('resize', () =>
-{
+window.addEventListener('resize', () => {
     // Update sizes
     sizes.width = window.innerWidth
     sizes.height = window.innerHeight
@@ -264,8 +261,8 @@ const aspect = sizes.width / sizes.height;
 
 
 const camera = new THREE.PerspectiveCamera(35, sizes.width / sizes.height, 0.1, 1000)
-camera.position.x = 4
-camera.position.y = 4
+camera.position.x = 20
+camera.position.y = 20
 
 scene.add(camera)
 
@@ -293,8 +290,7 @@ renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
  */
 const clock = new THREE.Clock()
 
-const tick = () =>
-{
+const tick = () => {
     const elapsedTime = clock.getElapsedTime()
 
     // update water

@@ -65,18 +65,12 @@ void main()
 {
     vec4 modelPosition = modelMatrix * vec4(position, 1.0);
 
-    float elevation = calculateElevation(modelPosition.xz);
+    float elevation = uWavesAmplitude * snoise(uWavesFrequency * modelPosition.xz +
+
+    uWavesSpeed * uTime);
+
     modelPosition.y += elevation;
+    vElevation = elevation;
 
-    float eps = 0.001;
-    vec3 p = modelPosition.xyz;
-    vec3 px = vec3(p.x + eps, calculateElevation(vec2(p.x + eps, p.z)), p.z);
-    vec3 pz = vec3(p.x, calculateElevation(vec2(p.x, p.z + eps)), p.z + eps);
-
-    vec3 tangent = normalize(px - p);
-    vec3 bitangent = normalize(pz - p);
-    vNormal = normalize(cross(tangent, bitangent));
-
-    vWorldPosition = modelPosition.xyz;
     gl_Position = projectionMatrix * viewMatrix * modelPosition;
 }
