@@ -153,29 +153,34 @@ const waterMaterial = new THREE.ShaderMaterial({
 
         uOpacity: { value: 0.5 },
 
-        uTroughColor: { value: new THREE.Color('#186691') },
-        uSurfaceColor: { value: new THREE.Color(1, 0, 0) },
-        uPeakColor: { value: new THREE.Color('#bbd8e0') },
+        // uTroughColor: { value: new THREE.Color('#186691') },
+        // uSurfaceColor: { value: new THREE.Color('#9bd8c0') },
+        // uPeakColor: { value: new THREE.Color('#bbd8e0') },
 
-        uWavesAmplitude: { value: 0.05 },
-        uWavesFrequency: { value: 0.3 },
-        uWavesPersistence: { value: 0.3 },
-        uWavesLacunarity: { value: 2.0 },
+
+        uTroughColor: { value: new THREE.Color(1, 0, 0) },
+        uSurfaceColor: { value: new THREE.Color(0, 1, 0) },
+        uPeakColor: { value: new THREE.Color(0, 0, 1) },
+
+        uWavesAmplitude: { value: 0.5 },
+        uWavesFrequency: { value: 0.16 },
+        uWavesPersistence: { value: 0.38 },
+        uWavesLacunarity: { value: 1.5 },
         uWavesIterations: { value: 6 },
         uWavesSpeed: { value: 0.3 },
 
-        uTroughThreshold: { value: -0.01 },
-        uTroughTransition: { value: 0.12 },
-        uPeakThreshold: { value: 0.08 },
-        uPeakTransition: { value: 0.06 },
+        uTroughThreshold: { value: -0.7 },
+        uTroughTransition: { value: 0.5 },
+        uPeakThreshold: { value: 0.36 },
+        uPeakTransition: { value: 0.5 },
 
         uFresnelStrength: { value: 0.5 },
         uFresnelPower: { value: 1.3 }
     }
 })
 
-waterMaterial.depthWrite = false;
-waterMaterial.blending = THREE.AdditiveBlending;
+// waterMaterial.depthWrite = false;
+// waterMaterial.blending = THREE.AdditiveBlending;
 
 const water = new THREE.Mesh(waterGeometry, waterMaterial)
 
@@ -188,7 +193,7 @@ scene.add(water)
 gui.add(waterMaterial.uniforms.uOpacity, 'value').min(0).max(1).step(0.01).name('Opacity')
 
 gui.add(waterMaterial.uniforms.uWavesAmplitude, 'value').min(0).max(1).step(0.1).name('Amplitude')
-gui.add(waterMaterial.uniforms.uWavesFrequency, 'value').min(0.1).max(10).step(0.1).name('Frequency')
+gui.add(waterMaterial.uniforms.uWavesFrequency, 'value').min(0.01).max(1).step(0.01).name('Frequency')
 gui.add(waterMaterial.uniforms.uWavesPersistence, 'value').min(0).max(1).step(0.001).name('Persistence')
 gui.add(waterMaterial.uniforms.uWavesLacunarity, 'value').min(0).max(3).step(0.001).name('Lacunarity')
 gui.add(waterMaterial.uniforms.uWavesIterations, 'value').min(1).max(6).step(1).name('Iterations')
@@ -198,10 +203,10 @@ gui.addColor(debugObject, 'troughColor').onChange(() => { waterMaterial.uniforms
 gui.addColor(debugObject, 'surfaceColor').onChange(() => { waterMaterial.uniforms.uSurfaceColor.value.set(debugObject.surfaceColor) })
 gui.addColor(debugObject, 'peakColor').onChange(() => { waterMaterial.uniforms.uPeakColor.value.set(debugObject.peakColor) })
 
-gui.add(waterMaterial.uniforms.uPeakThreshold, 'value').min(-0.5).max(0.5).step(0.001).name('Peak Threshold')
-gui.add(waterMaterial.uniforms.uPeakTransition, 'value').min(0).max(0.5).step(0.001).name('Peak Transition')
-gui.add(waterMaterial.uniforms.uTroughThreshold, 'value').min(-0.5).max(0.5).step(0.001).name('Trough Threshold')
-gui.add(waterMaterial.uniforms.uTroughTransition, 'value').min(0).max(0.5).step(0.001).name('Trough Transition')
+gui.add(waterMaterial.uniforms.uPeakThreshold, 'value').min(-1.0).max(1.0).step(0.001).name('Peak Threshold')
+gui.add(waterMaterial.uniforms.uPeakTransition, 'value').min(0).max(1.0).step(0.001).name('Peak Transition')
+gui.add(waterMaterial.uniforms.uTroughThreshold, 'value').min(-1.0).max(1.0).step(0.001).name('Trough Threshold')
+gui.add(waterMaterial.uniforms.uTroughTransition, 'value').min(0).max(1.0).step(0.001).name('Trough Transition')
 
 
 /**

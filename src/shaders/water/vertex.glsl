@@ -13,7 +13,18 @@ varying float vElevation;
 varying vec3 vWorldPosition;
 varying vec3 vNormal;
 
+// //	Simplex 3D Noise 
+// //	by Ian McEwan, Stefan Gustavson (https://github.com/stegu/webgl-noise)
+// //
+// vec4 permute(vec4 x) {
+//   return mod(((x * 34.0) + 1.0) * x, 289.0);
+// }
+// vec4 taylorInvSqrt(vec4 r) {
+//   return 1.79284291400159 - 0.85373472095314 * r;
+// }
+
 // Simplex 2D noise
+//
 vec3 permute(vec3 x) {
   return mod(((x * 34.0) + 1.0) * x, 289.0);
 }
@@ -44,9 +55,7 @@ float snoise(vec2 v) {
 
 float calculateElevation(vec2 position) {
   float total = 0.0;
-
   float amplitude = 1.0;
-
   float frequency = uWavesFrequency;
 
   for(int i = 0; i < uWavesIterations; i++) {
@@ -54,8 +63,7 @@ float calculateElevation(vec2 position) {
           uWavesSpeed * uTime);
 
     amplitude *= uWavesPersistence;
-    frequency *= uWavesLacunarity;
-    
+    frequency *= uWavesLacunarity; 
   }
 
   return uWavesAmplitude * total;
@@ -65,11 +73,9 @@ void main()
 {
     vec4 modelPosition = modelMatrix * vec4(position, 1.0);
 
-    float elevation = uWavesAmplitude * snoise(uWavesFrequency * modelPosition.xz +
-
-    uWavesSpeed * uTime);
-
+    float elevation = calculateElevation(modelPosition.xz);
     modelPosition.y += elevation;
+
     vElevation = elevation;
 
     gl_Position = projectionMatrix * viewMatrix * modelPosition;
