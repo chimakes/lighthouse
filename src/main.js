@@ -135,7 +135,7 @@ gltfLoader.load(
 )
 
 // water plane
-const waterGeometry = new THREE.PlaneGeometry(20, 20, 128, 128)
+const waterGeometry = new THREE.PlaneGeometry(20, 20, 256, 256)
 
 // water color
 debugObject.troughColor = '#186691'
@@ -174,7 +174,8 @@ const waterMaterial = new THREE.ShaderMaterial({
     }
 })
 
-
+waterMaterial.depthWrite = false;
+waterMaterial.blending = THREE.AdditiveBlending;
 
 const water = new THREE.Mesh(waterGeometry, waterMaterial)
 
