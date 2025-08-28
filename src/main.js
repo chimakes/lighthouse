@@ -43,8 +43,6 @@ const environmentMap = cubeTextureLoader.load([
     '/environmentMaps/nz.png'  // negative z
 ]);
 
-environmentMap.encoding = THREE.sRGBEncoding;
-
 scene.background = environmentMap;  // fills entire background
 scene.environment = environmentMap; // adds reflections
 
@@ -130,7 +128,7 @@ gltfLoader.load(
 
         gltf.scene.scale.set(0.3, 0.3, 0.3)
         gltf.scene.position.set(0, -1, 0)
-        // scene.add(gltf.scene)        
+        scene.add(gltf.scene)        
     }
 )
 
@@ -150,17 +148,13 @@ const waterMaterial = new THREE.ShaderMaterial({
     uniforms:
     {
         uTime: { value: 0.0 },
+        uEnvironmentMap: { value: environmentMap },
 
         uOpacity: { value: 0.5 },
 
-        // uTroughColor: { value: new THREE.Color('#186691') },
-        // uSurfaceColor: { value: new THREE.Color('#9bd8c0') },
-        // uPeakColor: { value: new THREE.Color('#bbd8e0') },
-
-
-        uTroughColor: { value: new THREE.Color(1, 0, 0) },
-        uSurfaceColor: { value: new THREE.Color(0, 1, 0) },
-        uPeakColor: { value: new THREE.Color(0, 0, 1) },
+        uTroughColor: { value: new THREE.Color('#186691') },
+        uSurfaceColor: { value: new THREE.Color('#9bd8c0') },
+        uPeakColor: { value: new THREE.Color('#bbd8e0') },
 
         uWavesAmplitude: { value: 0.5 },
         uWavesFrequency: { value: 0.16 },
@@ -185,7 +179,7 @@ const waterMaterial = new THREE.ShaderMaterial({
 const water = new THREE.Mesh(waterGeometry, waterMaterial)
 
 water.rotation.x = - Math.PI / 2
-water.position.y = -1.05
+// water.position.y = -1.05
 scene.add(water)
 
 // Water debug
