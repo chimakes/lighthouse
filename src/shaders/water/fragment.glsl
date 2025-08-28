@@ -16,30 +16,36 @@ uniform float uFresnelPower;
 
 varying vec3 vWorldPosition;
 varying vec3 vNormal;
-varying float vElevation;
 
 void main()
 {
-    
+    vec3 viewDirection = normalize(vWorldPosition - cameraPosition);
+    vec3 reflected = reflect(viewDirection, vNormal);
+    reflected.x *= -1.0;
+
+    vec3 reflectionColor = vec3(1, 0, 1);
+
+    float fresnel = uFresnelStrength * pow(1.0 - clamp(dot(viewDirection, vNormal), 0.0, 1.0), uFresnelPower);
+
     // mixing color value
     float trough2Surface = smoothstep(
         uTroughThreshold - uTroughTransition,
         uTroughThreshold + uTroughTransition,
-        vElevation
+        vWorldPosition.y
     );
 
     float trough2Peak = smoothstep(
         uPeakThreshold - uPeakTransition,
         uPeakThreshold + uPeakTransition,
-        vElevation
+        vWorldPosition.y
     );
 
     vec3 mixedColor1 = mix(uTroughColor, uSurfaceColor, trough2Surface);
     vec3 mixedColor2 = mix(mixedColor1, uPeakColor, trough2Peak);
 
-    gl_FragColor = vec4(mixedColor2, uOpacity);
+    vec3 finalColor = mix(mixedColor2, reflectionColor, fresnel);
+    gl_FragColor = vec4(finalColor, uOpacity);
 
     #include <colorspace_fragment>
     #include <tonemapping_fragment>
 }
-

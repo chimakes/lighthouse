@@ -63,7 +63,7 @@ float calculateElevation(vec2 position) {
           uWavesSpeed * uTime);
 
     amplitude *= uWavesPersistence;
-    frequency *= uWavesLacunarity; 
+    frequency *= uWavesLacunarity;
   }
 
   return uWavesAmplitude * total;
@@ -76,7 +76,15 @@ void main()
     float elevation = calculateElevation(modelPosition.xz);
     modelPosition.y += elevation;
 
-    vElevation = elevation;
+    float eps = 0.001;
+    vec3 p = modelPosition.xyz;
+    vec3 px = vec3(p.x + eps, calculateElevation(vec2(p.x + eps, p.z)), p.z);
+    vec3 pz = vec3(p.x, calculateElevation(vec2(p.x, p.z + eps)), p.z + eps);
 
+    vec3 tangent = normalize(px - p);
+    vec3 bitangent = normalize(pz - p);
+    vNormal = normalize(cross(tangent, bitangent));
+
+    vWorldPosition = modelPosition.xyz;
     gl_Position = projectionMatrix * viewMatrix * modelPosition;
 }
