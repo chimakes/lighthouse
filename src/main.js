@@ -3,6 +3,7 @@ import "./style.css"
 import GUI from 'lil-gui'
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js'
 import { Sky } from 'three/addons/objects/Sky.js';
+import { Water } from './objects/Water.js'
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js'
 import { DRACOLoader } from 'three/examples/jsm/loaders/DRACOLoader.js'
 
@@ -128,79 +129,40 @@ gltfLoader.load(
 
         gltf.scene.scale.set(0.3, 0.3, 0.3)
         gltf.scene.position.set(0, -1, 0)
-        scene.add(gltf.scene)        
+        // scene.add(gltf.scene)        
     }
 )
 
-// water plane
-const waterGeometry = new THREE.PlaneGeometry(20, 20, 256, 256)
+
+const water = new Water({resolution: 256, environmentMap});
+water.rotation.x = - Math.PI / 2
+// water.position.y = -1.05
+scene.add(water)
 
 // water color
 debugObject.troughColor = '#186691'
 debugObject.surfaceColor = '#9bd8c0'
 debugObject.peakColor = '#bbd8e0'
 
-
-const waterMaterial = new THREE.ShaderMaterial({
-    vertexShader: waterVertexShader,
-    fragmentShader: waterFragmentShader,
-    transparent: true,
-    uniforms:
-    {
-        uTime: { value: 0.0 },
-        uEnvironmentMap: { value: environmentMap },
-
-        uOpacity: { value: 0.5 },
-
-        uTroughColor: { value: new THREE.Color('#186691') },
-        uSurfaceColor: { value: new THREE.Color('#9bd8c0') },
-        uPeakColor: { value: new THREE.Color('#bbd8e0') },
-
-        uWavesAmplitude: { value: 0.5 },
-        uWavesFrequency: { value: 0.16 },
-        uWavesPersistence: { value: 0.38 },
-        uWavesLacunarity: { value: 1.5 },
-        uWavesIterations: { value: 6 },
-        uWavesSpeed: { value: 0.3 },
-
-        uTroughThreshold: { value: -0.7 },
-        uTroughTransition: { value: 0.5 },
-        uPeakThreshold: { value: 0.36 },
-        uPeakTransition: { value: 0.5 },
-
-        uFresnelStrength: { value: 0.5 },
-        uFresnelPower: { value: 1.3 }
-    }
-})
-
-// waterMaterial.depthWrite = false;
-// waterMaterial.blending = THREE.AdditiveBlending;
-
-const water = new THREE.Mesh(waterGeometry, waterMaterial)
-
-water.rotation.x = - Math.PI / 2
-// water.position.y = -1.05
-scene.add(water)
-
 // Water debug
 // gui.add(water.position, 'y').min(-5).max(5).step(0.01).name('waterHeight')
-gui.add(waterMaterial.uniforms.uOpacity, 'value').min(0).max(1).step(0.01).name('Opacity')
+// gui.add(waterMaterial.uniforms.uOpacity, 'value').min(0).max(1).step(0.01).name('Opacity')
 
-gui.add(waterMaterial.uniforms.uWavesAmplitude, 'value').min(0).max(1).step(0.1).name('Amplitude')
-gui.add(waterMaterial.uniforms.uWavesFrequency, 'value').min(0.01).max(1).step(0.01).name('Frequency')
-gui.add(waterMaterial.uniforms.uWavesPersistence, 'value').min(0).max(1).step(0.001).name('Persistence')
-gui.add(waterMaterial.uniforms.uWavesLacunarity, 'value').min(0).max(3).step(0.001).name('Lacunarity')
-gui.add(waterMaterial.uniforms.uWavesIterations, 'value').min(1).max(6).step(1).name('Iterations')
-gui.add(waterMaterial.uniforms.uWavesSpeed, 'value').min(0).max(5).step(0.001).name('Speed')
+// gui.add(waterMaterial.uniforms.uWavesAmplitude, 'value').min(0).max(1).step(0.1).name('Amplitude')
+// gui.add(waterMaterial.uniforms.uWavesFrequency, 'value').min(0.01).max(1).step(0.01).name('Frequency')
+// gui.add(waterMaterial.uniforms.uWavesPersistence, 'value').min(0).max(1).step(0.001).name('Persistence')
+// gui.add(waterMaterial.uniforms.uWavesLacunarity, 'value').min(0).max(3).step(0.001).name('Lacunarity')
+// gui.add(waterMaterial.uniforms.uWavesIterations, 'value').min(1).max(6).step(1).name('Iterations')
+// gui.add(waterMaterial.uniforms.uWavesSpeed, 'value').min(0).max(5).step(0.001).name('Speed')
 
-gui.addColor(debugObject, 'troughColor').onChange(() => { waterMaterial.uniforms.uTroughColor.value.set(debugObject.troughColor) })
-gui.addColor(debugObject, 'surfaceColor').onChange(() => { waterMaterial.uniforms.uSurfaceColor.value.set(debugObject.surfaceColor) })
-gui.addColor(debugObject, 'peakColor').onChange(() => { waterMaterial.uniforms.uPeakColor.value.set(debugObject.peakColor) })
+// gui.addColor(debugObject, 'troughColor').onChange(() => { waterMaterial.uniforms.uTroughColor.value.set(debugObject.troughColor) })
+// gui.addColor(debugObject, 'surfaceColor').onChange(() => { waterMaterial.uniforms.uSurfaceColor.value.set(debugObject.surfaceColor) })
+// gui.addColor(debugObject, 'peakColor').onChange(() => { waterMaterial.uniforms.uPeakColor.value.set(debugObject.peakColor) })
 
-gui.add(waterMaterial.uniforms.uPeakThreshold, 'value').min(-1.0).max(1.0).step(0.001).name('Peak Threshold')
-gui.add(waterMaterial.uniforms.uPeakTransition, 'value').min(0).max(1.0).step(0.001).name('Peak Transition')
-gui.add(waterMaterial.uniforms.uTroughThreshold, 'value').min(-1.0).max(1.0).step(0.001).name('Trough Threshold')
-gui.add(waterMaterial.uniforms.uTroughTransition, 'value').min(0).max(1.0).step(0.001).name('Trough Transition')
+// gui.add(waterMaterial.uniforms.uPeakThreshold, 'value').min(-1.0).max(1.0).step(0.001).name('Peak Threshold')
+// gui.add(waterMaterial.uniforms.uPeakTransition, 'value').min(0).max(1.0).step(0.001).name('Peak Transition')
+// gui.add(waterMaterial.uniforms.uTroughThreshold, 'value').min(-1.0).max(1.0).step(0.001).name('Trough Threshold')
+// gui.add(waterMaterial.uniforms.uTroughTransition, 'value').min(0).max(1.0).step(0.001).name('Trough Transition')
 
 
 /**
@@ -294,7 +256,7 @@ const tick = () => {
     const elapsedTime = clock.getElapsedTime()
 
     // update water
-    waterMaterial.uniforms.uTime.value = elapsedTime
+    water.update(elapsedTime);
 
     // Update controls
     controls.update()
