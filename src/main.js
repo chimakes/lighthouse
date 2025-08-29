@@ -4,6 +4,7 @@ import { setupUI } from './ui.js';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js'
 import { Sky } from 'three/addons/objects/Sky.js';
 import { Water } from './objects/Water.js'
+import { Ground } from './objects/Ground.js'
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js'
 import { DRACOLoader } from 'three/examples/jsm/loaders/DRACOLoader.js'
 
@@ -126,8 +127,10 @@ gltfLoader.load(
 
 const water = new Water({resolution: 256, environmentMap});
 water.rotation.x = - Math.PI / 2
-// water.position.y = -1.05
 scene.add(water)
+
+const ground = new Ground();
+scene.add(ground);
 
 
 /**
@@ -215,8 +218,9 @@ const clock = new THREE.Clock()
 const tick = () => {
     const elapsedTime = clock.getElapsedTime()
 
-    // update water
+    // update water and ground
     water.update(elapsedTime);
+    ground.update(elapsedTime);
 
     // Update controls
     controls.update()
@@ -229,4 +233,4 @@ const tick = () => {
 }
 
 tick()
-setupUI(water);
+setupUI(water, ground);

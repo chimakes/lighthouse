@@ -1,6 +1,6 @@
 import GUI from 'lil-gui'
 
-export function setupUI(water) {
+export function setupUI(water, ground) {
     const gui = new GUI({
         width: 250
     });
@@ -35,6 +35,12 @@ export function setupUI(water) {
     gui.add(water.material.uniforms.uFresnelStrength, 'value').min(0).max(1.0).step(0.001).name('Fresnel Scale')
     gui.add(water.material.uniforms.uFresnelPower, 'value').min(0).max(3.0).step(0.001).name('Fresnel Power')
 
+    // ground debug
+    gui.add(ground.material.uniforms.uCausticsIntensity, 'value').min(0).max(2).name('Caustics Intensity');
+    gui.add(ground.material.uniforms.uCausticsScale, 'value').min(0).max(20).name('Caustics Scale');
+    gui.add(ground.material.uniforms.uCausticsSpeed, 'value').min(0).max(1).name('Caustics Speed');
+    gui.add(ground.material.uniforms.uCausticsOffset, 'value').min(-2).max(2).name('Caustics Offset');
+    gui.add(ground.material.uniforms.uCausticsThickness, 'value').min(0).max(1).name('Caustics Thickness');
 
     // Camera position debug
     // gui.add(camera.position, 'x').min(-5).max(5).step(0.01).name('cameraX')
