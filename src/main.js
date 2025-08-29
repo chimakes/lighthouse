@@ -118,8 +118,8 @@ gltfLoader.load(
         lighthouseEmission2.material = emissionMaterial
 
         gltf.scene.scale.set(0.3, 0.3, 0.3)
-        gltf.scene.position.set(0, -1, 0)
-        // scene.add(gltf.scene)        
+        gltf.scene.position.set(0, 0.12, 0)
+        scene.add(gltf.scene)        
     }
 )
 

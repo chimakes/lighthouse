@@ -17,7 +17,7 @@ export class Water extends THREE.Mesh {
                 uSurfaceColor: { value: new THREE.Color('#72a3a7') },
                 uPeakColor: { value: new THREE.Color('#a4bcbd') },
 
-                uWavesAmplitude: { value: 0.3 },
+                uWavesAmplitude: { value: 0.15 },
                 uWavesFrequency: { value: 0.14 },
                 uWavesPersistence: { value: 0.6 },
                 uWavesLacunarity: { value: 1.42 },

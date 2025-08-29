@@ -2,7 +2,7 @@ import GUI from 'lil-gui'
 
 export function setupUI(water) {
     const gui = new GUI({
-        width: 400
+        width: 250
     });
 
     const debugObject = {}
@@ -13,10 +13,10 @@ export function setupUI(water) {
     debugObject.peakColor = '#bbd8e0'
     
     // Water debug
-    // gui.add(water.position, 'y').min(-5).max(5).step(0.01).name('waterHeight')
+    gui.add(water.position, 'y').min(-5).max(5).step(0.01).name('waterHeight')
     gui.add(water.material.uniforms.uOpacity, 'value').min(0).max(1).step(0.01).name('Opacity')
     
-    gui.add(water.material.uniforms.uWavesAmplitude, 'value').min(0).max(1).step(0.1).name('Amplitude')
+    gui.add(water.material.uniforms.uWavesAmplitude, 'value').min(0).max(1).step(0.01).name('Amplitude')
     gui.add(water.material.uniforms.uWavesFrequency, 'value').min(0.01).max(1).step(0.01).name('Frequency')
     gui.add(water.material.uniforms.uWavesPersistence, 'value').min(0).max(1).step(0.001).name('Persistence')
     gui.add(water.material.uniforms.uWavesLacunarity, 'value').min(0).max(3).step(0.001).name('Lacunarity')
