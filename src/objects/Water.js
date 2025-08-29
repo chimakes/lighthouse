@@ -13,8 +13,8 @@ export class Water extends THREE.Mesh {
 
                 uOpacity: { value: 0.8 },
 
-                uTroughColor: { value: new THREE.Color('#0b4f62') },
-                uSurfaceColor: { value: new THREE.Color('#72a3a7') },
+                uTroughColor: { value: new THREE.Color('#1a6b79') },
+                uSurfaceColor: { value: new THREE.Color('#98dcb7') },
                 uPeakColor: { value: new THREE.Color('#a4bcbd') },
 
                 uWavesAmplitude: { value: 0.15 },
