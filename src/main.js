@@ -7,14 +7,9 @@ import { Water } from './objects/Water.js'
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js'
 import { DRACOLoader } from 'three/examples/jsm/loaders/DRACOLoader.js'
 
-
-import waterVertexShader from './shaders/water/vertex.glsl'
-import waterFragmentShader from './shaders/water/fragment.glsl'
-
 /**
  * Base
  */
-
 // Canvas
 const canvas = document.querySelector('canvas.webgl')
 
