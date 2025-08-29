@@ -1,6 +1,6 @@
 import * as THREE from 'three'
 import "./style.css"
-import GUI from 'lil-gui'
+import { setupUI } from './ui.js';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js'
 import { Sky } from 'three/addons/objects/Sky.js';
 import { Water } from './objects/Water.js'
@@ -14,11 +14,6 @@ import waterFragmentShader from './shaders/water/fragment.glsl'
 /**
  * Base
  */
-// Debug
-const gui = new GUI({
-    width: 400
-})
-const debugObject = {}
 
 // Canvas
 const canvas = document.querySelector('canvas.webgl')
@@ -139,31 +134,6 @@ water.rotation.x = - Math.PI / 2
 // water.position.y = -1.05
 scene.add(water)
 
-// water color
-debugObject.troughColor = '#186691'
-debugObject.surfaceColor = '#9bd8c0'
-debugObject.peakColor = '#bbd8e0'
-
-// Water debug
-// gui.add(water.position, 'y').min(-5).max(5).step(0.01).name('waterHeight')
-// gui.add(waterMaterial.uniforms.uOpacity, 'value').min(0).max(1).step(0.01).name('Opacity')
-
-// gui.add(waterMaterial.uniforms.uWavesAmplitude, 'value').min(0).max(1).step(0.1).name('Amplitude')
-// gui.add(waterMaterial.uniforms.uWavesFrequency, 'value').min(0.01).max(1).step(0.01).name('Frequency')
-// gui.add(waterMaterial.uniforms.uWavesPersistence, 'value').min(0).max(1).step(0.001).name('Persistence')
-// gui.add(waterMaterial.uniforms.uWavesLacunarity, 'value').min(0).max(3).step(0.001).name('Lacunarity')
-// gui.add(waterMaterial.uniforms.uWavesIterations, 'value').min(1).max(6).step(1).name('Iterations')
-// gui.add(waterMaterial.uniforms.uWavesSpeed, 'value').min(0).max(5).step(0.001).name('Speed')
-
-// gui.addColor(debugObject, 'troughColor').onChange(() => { waterMaterial.uniforms.uTroughColor.value.set(debugObject.troughColor) })
-// gui.addColor(debugObject, 'surfaceColor').onChange(() => { waterMaterial.uniforms.uSurfaceColor.value.set(debugObject.surfaceColor) })
-// gui.addColor(debugObject, 'peakColor').onChange(() => { waterMaterial.uniforms.uPeakColor.value.set(debugObject.peakColor) })
-
-// gui.add(waterMaterial.uniforms.uPeakThreshold, 'value').min(-1.0).max(1.0).step(0.001).name('Peak Threshold')
-// gui.add(waterMaterial.uniforms.uPeakTransition, 'value').min(0).max(1.0).step(0.001).name('Peak Transition')
-// gui.add(waterMaterial.uniforms.uTroughThreshold, 'value').min(-1.0).max(1.0).step(0.001).name('Trough Threshold')
-// gui.add(waterMaterial.uniforms.uTroughTransition, 'value').min(0).max(1.0).step(0.001).name('Trough Transition')
-
 
 /**
  * Light
@@ -228,11 +198,6 @@ camera.position.y = 20
 
 scene.add(camera)
 
-// Camera position debug
-// gui.add(camera.position, 'x').min(-5).max(5).step(0.01).name('cameraX')
-// gui.add(camera.position, 'y').min(-5).max(5).step(0.01).name('cameraY')
-// gui.add(camera.position, 'z').min(-5).max(5).step(0.01).name('cameraZ')
-
 // Controls
 const controls = new OrbitControls(camera, canvas);
 controls.enableDamping = true
@@ -269,3 +234,4 @@ const tick = () => {
 }
 
 tick()
+setupUI(water);
