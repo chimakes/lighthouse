@@ -21,7 +21,7 @@ export function setupUI(water) {
     gui.add(water.material.uniforms.uWavesPersistence, 'value').min(0).max(1).step(0.001).name('Persistence')
     gui.add(water.material.uniforms.uWavesLacunarity, 'value').min(0).max(3).step(0.001).name('Lacunarity')
     gui.add(water.material.uniforms.uWavesIterations, 'value').min(1).max(6).step(1).name('Iterations')
-    gui.add(water.material.uniforms.uWavesSpeed, 'value').min(0).max(5).step(0.001).name('Speed')
+    gui.add(water.material.uniforms.uWavesSpeed, 'value').min(0).max(2).step(0.001).name('Speed')
     
     gui.addColor(debugObject, 'troughColor').onChange(() => { water.material.uniforms.uTroughColor.value.set(debugObject.troughColor) })
     gui.addColor(debugObject, 'surfaceColor').onChange(() => { water.material.uniforms.uSurfaceColor.value.set(debugObject.surfaceColor) })
@@ -31,6 +31,10 @@ export function setupUI(water) {
     gui.add(water.material.uniforms.uPeakTransition, 'value').min(0).max(1.0).step(0.001).name('Peak Transition')
     gui.add(water.material.uniforms.uTroughThreshold, 'value').min(-1.0).max(1.0).step(0.001).name('Trough Threshold')
     gui.add(water.material.uniforms.uTroughTransition, 'value').min(0).max(1.0).step(0.001).name('Trough Transition')
+ 
+    gui.add(water.material.uniforms.uFresnelStrength, 'value').min(0).max(1.0).step(0.001).name('Fresnel Scale')
+    gui.add(water.material.uniforms.uFresnelPower, 'value').min(0).max(3.0).step(0.001).name('Fresnel Power')
+
 
     // Camera position debug
     // gui.add(camera.position, 'x').min(-5).max(5).step(0.01).name('cameraX')

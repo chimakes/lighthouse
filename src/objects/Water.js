@@ -11,26 +11,26 @@ export class Water extends THREE.Mesh {
                 uTime: { value: 0.0 },
                 uEnvironmentMap: { value: options.environmentMap },
 
-                uOpacity: { value: 0.5 },
+                uOpacity: { value: 0.8 },
 
-                uTroughColor: { value: new THREE.Color('#186691') },
-                uSurfaceColor: { value: new THREE.Color('#9bd8c0') },
-                uPeakColor: { value: new THREE.Color('#bbd8e0') },
+                uTroughColor: { value: new THREE.Color('#0b4f62') },
+                uSurfaceColor: { value: new THREE.Color('#72a3a7') },
+                uPeakColor: { value: new THREE.Color('#a4bcbd') },
 
-                uWavesAmplitude: { value: 0.5 },
-                uWavesFrequency: { value: 0.16 },
-                uWavesPersistence: { value: 0.38 },
-                uWavesLacunarity: { value: 1.5 },
-                uWavesIterations: { value: 6 },
-                uWavesSpeed: { value: 0.3 },
+                uWavesAmplitude: { value: 0.3 },
+                uWavesFrequency: { value: 0.14 },
+                uWavesPersistence: { value: 0.6 },
+                uWavesLacunarity: { value: 1.42 },
+                uWavesIterations: { value: 3 },
+                uWavesSpeed: { value: 0.2 },
 
-                uTroughThreshold: { value: -0.7 },
-                uTroughTransition: { value: 0.5 },
-                uPeakThreshold: { value: 0.36 },
-                uPeakTransition: { value: 0.5 },
+                uPeakThreshold: { value: 0.8 },
+                uPeakTransition: { value: 0.52 },
+                uTroughThreshold: { value: 0.6 },
+                uTroughTransition: { value: 0.75 },
 
-                uFresnelStrength: { value: 0.5 },
-                uFresnelPower: { value: 1.3 }
+                uFresnelStrength: { value: 0.3 },
+                uFresnelPower: { value: 2.5 }
             },
             vertexShader: waterVertexShader,
             fragmentShader: waterFragmentShader,
