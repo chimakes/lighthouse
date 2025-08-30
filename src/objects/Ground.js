@@ -24,7 +24,7 @@ export class Ground extends THREE.Mesh {
             fragmentShader: waterFragmentShader
         })
 
-        this.geometry = new THREE.PlaneGeometry(20, 20)
+        this.geometry = new THREE.PlaneGeometry(50, 50)
         this.rotation.x = - Math.PI / 2;
         this.position.y = -2.0
     }
