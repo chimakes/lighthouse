@@ -5,6 +5,8 @@ import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js'
 import { Sky } from 'three/addons/objects/Sky.js';
 import { Water } from './objects/Water.js'
 import { Ground } from './objects/Ground.js'
+import firefliesVertexShader from './shaders/fireflies/vertex.glsl'
+import firefliesFragmentShader from './shaders/fireflies/fragment.glsl'
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js'
 import { DRACOLoader } from 'three/examples/jsm/loaders/DRACOLoader.js'
 
@@ -125,6 +127,44 @@ gltfLoader.load(
 )
 
 
+/**
+ * Particles
+ */
+// Geometry
+const firefliesGeometry = new THREE.BufferGeometry()
+const count = 30
+const positionArray = new Float32Array(count * 3)
+const scaleArray = new Float32Array(count)
+
+for (let i = 0; i < count; i++) {
+    positionArray[i * 3 + 0] = (Math.random() - 0.5) * 4
+    positionArray[i * 3 + 1] = (Math.random()) * 2.5
+    positionArray[i * 3 + 2] = (Math.random() - 0.5) * 4
+
+    scaleArray[i] = Math.random()
+}
+firefliesGeometry.setAttribute('position', new THREE.BufferAttribute(positionArray, 3))
+firefliesGeometry.setAttribute('aScale', new THREE.BufferAttribute(scaleArray, 1))
+
+// Material
+const firefliesMaterial = new THREE.ShaderMaterial({
+    uniforms:
+    {
+        uTime: { value: 0 },
+        uPixelRatio: { value: Math.min(window.devicePixelRatio, 2) },
+        uSize: { value: 200 }
+    },
+    vertexShader: firefliesVertexShader,
+    fragmentShader: firefliesFragmentShader,
+    transparent: true,
+    blending: THREE.AdditiveBlending,
+    depthWrite: false
+})
+
+// Points
+const fireflies = new THREE.Points(firefliesGeometry, firefliesMaterial)
+scene.add(fireflies)
+
 const water = new Water({resolution: 256, environmentMap});
 water.rotation.x = - Math.PI / 2
 scene.add(water)
@@ -167,6 +207,9 @@ window.addEventListener('resize', () => {
     // Update renderer
     renderer.setSize(sizes.width, sizes.height)
     renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
+
+    // Update fireflies
+    firefliesMaterial.uniforms.uPixelRatio.value = Math.min(window.devicePixelRatio, 2)
 })
 
 /**
@@ -191,8 +234,8 @@ const aspect = sizes.width / sizes.height;
 
 
 const camera = new THREE.PerspectiveCamera(35, sizes.width / sizes.height, 0.1, 1000)
-camera.position.x = 20
-camera.position.y = 20
+camera.position.x = 7
+camera.position.y = 7
 
 scene.add(camera)
 
@@ -218,6 +261,9 @@ const clock = new THREE.Clock()
 const tick = () => {
     const elapsedTime = clock.getElapsedTime()
 
+    // Update fireflies
+    firefliesMaterial.uniforms.uTime.value = elapsedTime
+
     // update water and ground
     water.update(elapsedTime);
     ground.update(elapsedTime);
@@ -233,4 +279,4 @@ const tick = () => {
 }
 
 tick()
-setupUI(water, ground);
+setupUI(water, ground, fireflies);

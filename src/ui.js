@@ -1,6 +1,6 @@
 import GUI from 'lil-gui'
 
-export function setupUI(water, ground) {
+export function setupUI(water, ground, fireflies) {
     const gui = new GUI({
         width: 250
     });
@@ -41,6 +41,9 @@ export function setupUI(water, ground) {
     gui.add(ground.material.uniforms.uCausticsSpeed, 'value').min(0).max(1).name('Caustics Speed');
     gui.add(ground.material.uniforms.uCausticsOffset, 'value').min(-2).max(2).name('Caustics Offset');
     gui.add(ground.material.uniforms.uCausticsThickness, 'value').min(0).max(1).name('Caustics Thickness');
+
+    // fireflies debug
+    gui.add(fireflies.material.uniforms.uSize, 'value').min(0).max(500).step(1).name('Fireflies Size')
 
     // Camera position debug
     // gui.add(camera.position, 'x').min(-5).max(5).step(0.01).name('cameraX')
