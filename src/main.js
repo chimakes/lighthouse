@@ -1,12 +1,11 @@
 import * as THREE from 'three'
 import "./style.css"
 import { setupUI } from './ui.js';
+import { setupGltfGUI } from './ui.js';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js'
 import { Sky } from 'three/addons/objects/Sky.js';
 import { Water } from './objects/Water.js'
 import { Ground } from './objects/Ground.js'
-// import firefliesVertexShader from './shaders/fireflies/vertex.glsl'
-// import firefliesFragmentShader from './shaders/fireflies/fragment.glsl'
 import { Fireflies } from './objects/Fireflies.js'
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js'
 import { DRACOLoader } from 'three/examples/jsm/loaders/DRACOLoader.js'
@@ -122,10 +121,13 @@ gltfLoader.load(
         lighthouseEmission2.material = emissionMaterial
 
         gltf.scene.scale.set(0.3, 0.3, 0.3)
-        gltf.scene.position.set(0, 0.12, 0)
-        scene.add(gltf.scene)        
+        gltf.scene.position.set(1.18, 0.12, 1.55)
+        scene.add(gltf.scene)
+
+        // setupGltfGUI(gltf.scene)
     }
 )
+
 
 
 const fireflies = new Fireflies()
@@ -183,32 +185,28 @@ window.addEventListener('resize', () => {
  */
 // Orthographic camera
 const aspect = sizes.width / sizes.height;
-// const camera = new THREE.OrthographicCamera(
-//   -aspect * 3,
-//   aspect * 3,
-//   3,
-//   -3,
-//   1,
-//   1000
-// );
-// camera.position.x = 3.7
-// camera.position.y = 4.3
-// camera.position.z = 4
+const camera = new THREE.OrthographicCamera(
+  -aspect * 3,
+  aspect * 3,
+  3,
+  -3,
+  1,
+  1000
+);
+camera.position.x = 3.7
+camera.position.y = 3.34
+camera.position.z = 4
 
-// Perspective camera
-// Perspictive camera
-
-
-const camera = new THREE.PerspectiveCamera(35, sizes.width / sizes.height, 0.1, 1000)
-camera.position.x = 7
-camera.position.y = 7
+// // Perspective camera
+// const camera = new THREE.PerspectiveCamera(35, sizes.width / sizes.height, 0.1, 1000)
+// camera.position.x = 7
+// camera.position.y = 7
 
 scene.add(camera)
 
 // Controls
 const controls = new OrbitControls(camera, canvas);
 controls.enableDamping = true
-
 /**
  * Renderer
  */
@@ -245,4 +243,4 @@ const tick = () => {
 }
 
 tick()
-setupUI(water, ground, fireflies);
+setupUI(water, ground, fireflies, camera);

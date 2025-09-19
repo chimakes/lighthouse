@@ -51,5 +51,13 @@ export function setupUI(water, ground, fireflies) {
     // gui.add(camera.position, 'z').min(-5).max(5).step(0.01).name('cameraZ')
 }
 
+export function setupGltfGUI(gltfScene){
+    const gui = new GUI({
+        width: 250
+    });
 
+    gui.add(gltfScene.position, 'x').min(-5).max(5).step(0.01).name('Lighthouse position X')
+    gui.add(gltfScene.position, 'y').min(-5).max(5).step(0.01).name('Lighthouse position Y')
+    gui.add(gltfScene.position, 'z').min(-5).max(5).step(0.01).name('Lighthouse position Z')
+}
 
