@@ -5,8 +5,9 @@ import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js'
 import { Sky } from 'three/addons/objects/Sky.js';
 import { Water } from './objects/Water.js'
 import { Ground } from './objects/Ground.js'
-import firefliesVertexShader from './shaders/fireflies/vertex.glsl'
-import firefliesFragmentShader from './shaders/fireflies/fragment.glsl'
+// import firefliesVertexShader from './shaders/fireflies/vertex.glsl'
+// import firefliesFragmentShader from './shaders/fireflies/fragment.glsl'
+import { Fireflies } from './objects/Fireflies.js'
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js'
 import { DRACOLoader } from 'three/examples/jsm/loaders/DRACOLoader.js'
 
@@ -127,43 +128,8 @@ gltfLoader.load(
 )
 
 
-/**
- * Particles
- */
-// Geometry
-const firefliesGeometry = new THREE.BufferGeometry()
-const count = 30
-const positionArray = new Float32Array(count * 3)
-const scaleArray = new Float32Array(count)
-
-for (let i = 0; i < count; i++) {
-    positionArray[i * 3 + 0] = (Math.random() - 0.5) * 4
-    positionArray[i * 3 + 1] = (Math.random()) * 2.5
-    positionArray[i * 3 + 2] = (Math.random() - 0.5) * 4
-
-    scaleArray[i] = Math.random()
-}
-firefliesGeometry.setAttribute('position', new THREE.BufferAttribute(positionArray, 3))
-firefliesGeometry.setAttribute('aScale', new THREE.BufferAttribute(scaleArray, 1))
-
-// Material
-const firefliesMaterial = new THREE.ShaderMaterial({
-    uniforms:
-    {
-        uTime: { value: 0 },
-        uPixelRatio: { value: Math.min(window.devicePixelRatio, 2) },
-        uSize: { value: 200 }
-    },
-    vertexShader: firefliesVertexShader,
-    fragmentShader: firefliesFragmentShader,
-    transparent: true,
-    blending: THREE.AdditiveBlending,
-    depthWrite: false
-})
-
-// Points
-const fireflies = new THREE.Points(firefliesGeometry, firefliesMaterial)
-scene.add(fireflies)
+const fireflies = new Fireflies()
+scene.add(fireflies.points)
 
 const water = new Water({resolution: 256, environmentMap});
 water.rotation.x = - Math.PI / 2
@@ -209,7 +175,7 @@ window.addEventListener('resize', () => {
     renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
 
     // Update fireflies
-    firefliesMaterial.uniforms.uPixelRatio.value = Math.min(window.devicePixelRatio, 2)
+    fireflies.resize()
 })
 
 /**
@@ -262,7 +228,7 @@ const tick = () => {
     const elapsedTime = clock.getElapsedTime()
 
     // Update fireflies
-    firefliesMaterial.uniforms.uTime.value = elapsedTime
+    fireflies.update(elapsedTime);
 
     // update water and ground
     water.update(elapsedTime);
