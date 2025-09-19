@@ -1,24 +1,18 @@
 import * as THREE from 'three'
 import "./style.css"
-import GUI from 'lil-gui'
+import { setupUI } from './ui.js';
+import { setupGltfGUI } from './ui.js';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js'
 import { Sky } from 'three/addons/objects/Sky.js';
+import { Water } from './objects/Water.js'
+import { Ground } from './objects/Ground.js'
+import { Fireflies } from './objects/Fireflies.js'
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js'
 import { DRACOLoader } from 'three/examples/jsm/loaders/DRACOLoader.js'
-
-
-import waterVertexShader from './shaders/water/vertex.glsl'
-import waterFragmentShader from './shaders/water/fragment.glsl'
 
 /**
  * Base
  */
-// Debug
-const gui = new GUI({
-  width: 400
-})
-const debugObject = {}
-
 // Canvas
 const canvas = document.querySelector('canvas.webgl')
 
@@ -29,6 +23,22 @@ const scene = new THREE.Scene()
  * Loaders
  */
 const textureLoader = new THREE.TextureLoader()
+const cubeTextureLoader = new THREE.CubeTextureLoader()
+
+/**
+ * Environment map
+ */
+const environmentMap = cubeTextureLoader.load([
+    '/environmentMaps/px.png', // positive x
+    '/environmentMaps/nx.png', // negative x 
+    '/environmentMaps/py.png', // positive y
+    '/environmentMaps/ny.png', // negative y
+    '/environmentMaps/pz.png', // positive z
+    '/environmentMaps/nz.png'  // negative z
+]);
+
+scene.background = environmentMap;  // fills entire background
+scene.environment = environmentMap; // adds reflections
 
 // // Draco loader
 const dracoLoader = new DRACOLoader()
@@ -85,19 +95,18 @@ const emissionMaterial = new THREE.MeshBasicMaterial({ color: 0xffffe5 })
  */
 gltfLoader.load(
     '/models/lighthouse.glb',
-    (gltf) =>
-    {
+    (gltf) => {
         gltf.scene.traverse((child) => {
-            if(child.isMesh){
-                Object.keys(textureMap).forEach(key=>{
-                    
-                    if(child.name.includes(key)){
+            if (child.isMesh) {
+                Object.keys(textureMap).forEach(key => {
+
+                    if (child.name.includes(key)) {
                         const material = new THREE.MeshBasicMaterial({
                             map: loadedTextures.day[key]
                         })
                         child.material = material
 
-                        if(child.material.map){
+                        if (child.material.map) {
                             child.material.map.minFilter = THREE.LinearFilter
                         }
                     }
@@ -106,69 +115,40 @@ gltfLoader.load(
         })
 
         const lighthouseEmission1 = gltf.scene.children.find(child => child.name === 'lighthouse_top_emission')
-        const lighthouseEmission2 = gltf.scene.children.find(child => child.name === 'lighthouse_window_emission')  
+        const lighthouseEmission2 = gltf.scene.children.find(child => child.name === 'lighthouse_window_emission')
 
         lighthouseEmission1.material = emissionMaterial
         lighthouseEmission2.material = emissionMaterial
 
         gltf.scene.scale.set(0.3, 0.3, 0.3)
-        gltf.scene.position.set(0, -1, 0)
-        scene.add(gltf.scene)        
+        gltf.scene.position.set(1.18, 0.12, 1.55)
+        scene.add(gltf.scene)
+
+        // setupGltfGUI(gltf.scene)
     }
 )
 
-// water plane
-const waterGeometry = new THREE.PlaneGeometry(20, 20, 128, 128)
-
-// water color
-debugObject.depthColor = '#70b0cf'
-debugObject.surfaceColor = '#80CCCC'
 
 
-const waterMaterial = new THREE.ShaderMaterial({
-    vertexShader: waterVertexShader,
-    fragmentShader:  waterFragmentShader,
-    uniforms:
-    {
-        uTime: { value: 0 },
-        uBigWavesElevation: { value: 0.15 },
-        uBigWavesFrequency: { value: new THREE.Vector2(0.7, 0.8) },
-        uBigWavesSpeed: { value: 0.7 },
+const fireflies = new Fireflies()
+scene.add(fireflies.points)
 
-        // color
-        uDepthColor: { value: new THREE.Color(debugObject.depthColor) },
-        uSurfaceColor: { value: new THREE.Color(debugObject.surfaceColor) },
-        uColorOffset: { value: 0.03 },
-        uColorMultiplier: { value: 1.5 },
-    }
-})
-
-
-
-const water = new THREE.Mesh(waterGeometry, waterMaterial)
-
+const water = new Water({resolution: 256, environmentMap});
 water.rotation.x = - Math.PI / 2
-water.position.y = -1.05
 scene.add(water)
 
-// Water debug
-gui.add(water.position, 'y').min(-5).max(5).step(0.01).name('waterHeight')
+const ground = new Ground();
+scene.add(ground);
 
-gui.add(waterMaterial.uniforms.uBigWavesElevation, 'value').min(0).max(1).step(0.001).name('uBigWavesElevation')
-gui.add(waterMaterial.uniforms.uBigWavesFrequency.value, 'x').min(0).max(10).step(0.001).name('uBigWavesFrequencyX')
-gui.add(waterMaterial.uniforms.uBigWavesFrequency.value, 'y').min(0).max(10).step(0.001).name('uBigWavesFrequencyY')
-gui.add(waterMaterial.uniforms.uBigWavesSpeed, 'value').min(0).max(5).step(0.001).name('uBigWavesSpeed')
-
-gui.addColor(debugObject, 'depthColor').onChange(() => { waterMaterial.uniforms.uDepthColor.value.set(debugObject.depthColor) })
-gui.addColor(debugObject, 'surfaceColor').onChange(() => { waterMaterial.uniforms.uSurfaceColor.value.set(debugObject.surfaceColor) })
-
-gui.add(waterMaterial.uniforms.uColorOffset, 'value').min(0).max(1).step(0.001).name('uColorOffset')
-gui.add(waterMaterial.uniforms.uColorMultiplier, 'value').min(0).max(10).step(0.001).name('uColorMultiplier')
 
 /**
  * Light
  */
+const ambientLight = new THREE.AmbientLight(0xffffff, 2.5);
+scene.add(ambientLight);
 
+const directionalLight = new THREE.DirectionalLight(0xffffff, 1.8)
+scene.add(directionalLight);
 
 /**
  * Sizes
@@ -178,8 +158,7 @@ const sizes = {
     height: window.innerHeight
 }
 
-window.addEventListener('resize', () =>
-{
+window.addEventListener('resize', () => {
     // Update sizes
     sizes.width = window.innerWidth
     sizes.height = window.innerHeight
@@ -196,6 +175,9 @@ window.addEventListener('resize', () =>
     // Update renderer
     renderer.setSize(sizes.width, sizes.height)
     renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
+
+    // Update fireflies
+    fireflies.resize()
 })
 
 /**
@@ -212,14 +194,15 @@ const camera = new THREE.OrthographicCamera(
   1000
 );
 camera.position.x = 3.7
-camera.position.y = 4.3
+camera.position.y = 3.34
 camera.position.z = 4
-scene.add(camera)
 
-// Camera position debug
-// gui.add(camera.position, 'x').min(-5).max(5).step(0.01).name('cameraX')
-// gui.add(camera.position, 'y').min(-5).max(5).step(0.01).name('cameraY')
-// gui.add(camera.position, 'z').min(-5).max(5).step(0.01).name('cameraZ')
+// // Perspective camera
+// const camera = new THREE.PerspectiveCamera(35, sizes.width / sizes.height, 0.1, 1000)
+// camera.position.x = 7
+// camera.position.y = 7
+
+scene.add(camera)
 
 // Controls
 const controls = new OrbitControls(camera, canvas);
@@ -244,67 +227,19 @@ renderer.setSize(sizes.width, sizes.height)
 renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
 
 /**
- * Sky
- */
-// Add Sky
-const sky = new Sky();
-sky.scale.setScalar( 450000 );
-scene.add( sky );
-
-const sun = new THREE.Vector3();
-
-/// GUI
-const skyParameters = {
-    turbidity: 10,
-    rayleigh: 0.772,
-    mieCoefficient: 0.005,
-    mieDirectionalG: 0.7,
-    elevation: 2,
-    azimuth: 180,
-    exposure: renderer.toneMappingExposure
-};
-
-function updateSky() {
-
-    const uniforms = sky.material.uniforms;
-    uniforms[ 'turbidity' ].value = skyParameters.turbidity;
-    uniforms[ 'rayleigh' ].value = skyParameters.rayleigh;
-    uniforms[ 'mieCoefficient' ].value = skyParameters.mieCoefficient;
-    uniforms[ 'mieDirectionalG' ].value = skyParameters.mieDirectionalG;
-
-    const phi = THREE.MathUtils.degToRad( 90 - skyParameters.elevation );
-    const theta = THREE.MathUtils.degToRad( skyParameters.azimuth );
-
-    sun.setFromSphericalCoords( 1, phi, theta );
-
-    uniforms[ 'sunPosition' ].value.copy( sun );
-
-    renderer.toneMappingExposure = skyParameters.exposure;
-    renderer.render( scene, camera );
-
-}
-
-gui.add( skyParameters, 'turbidity', 0.0, 20.0, 0.1 ).onChange( updateSky );
-gui.add( skyParameters, 'rayleigh', 0.0, 4, 0.001 ).onChange( updateSky );
-gui.add( skyParameters, 'mieCoefficient', 0.0, 0.1, 0.001 ).onChange( updateSky );
-gui.add( skyParameters, 'mieDirectionalG', 0.0, 1, 0.001 ).onChange( updateSky );
-gui.add( skyParameters, 'elevation', 0, 90, 0.1 ).onChange( updateSky );
-gui.add( skyParameters, 'azimuth', - 180, 180, 0.1 ).onChange( updateSky );
-// gui.add( skyParameters, 'exposure', 0, 1, 0.0001 ).onChange( updateSky );
-
-updateSky();
-
-/**
  * Animate
  */
 const clock = new THREE.Clock()
 
-const tick = () =>
-{
+const tick = () => {
     const elapsedTime = clock.getElapsedTime()
 
-    // update water
-    waterMaterial.uniforms.uTime.value = elapsedTime
+    // Update fireflies
+    fireflies.update(elapsedTime);
+
+    // update water and ground
+    water.update(elapsedTime);
+    ground.update(elapsedTime);
 
     // Update controls
     controls.update()
@@ -317,3 +252,4 @@ const tick = () =>
 }
 
 tick()
+setupUI(water, ground, fireflies, camera);
