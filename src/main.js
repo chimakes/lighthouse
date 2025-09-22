@@ -184,37 +184,40 @@ window.addEventListener('resize', () => {
  * Camera
  */
 // Orthographic camera
-const aspect = sizes.width / sizes.height;
-const camera = new THREE.OrthographicCamera(
-  -aspect * 3,
-  aspect * 3,
-  3,
-  -3,
-  1,
-  1000
-);
-camera.position.x = 3.7
-camera.position.y = 3.34
-camera.position.z = 4
+// const aspect = sizes.width / sizes.height;
+// const camera = new THREE.OrthographicCamera(
+//   -aspect * 3,
+//   aspect * 3,
+//   3,
+//   -3,
+//   1,
+//   1000
+// );
+// camera.position.x = 3.7
+// camera.position.y = 3.34
+// camera.position.z = 4
 
 // // Perspective camera
-// const camera = new THREE.PerspectiveCamera(35, sizes.width / sizes.height, 0.1, 1000)
-// camera.position.x = 7
-// camera.position.y = 7
+const camera = new THREE.PerspectiveCamera(20, sizes.width / sizes.height, 0.1, 1000)
+camera.position.x = 10
+camera.position.y = 10
+camera.position.z = 10
 
 scene.add(camera)
 
 // Controls
 const controls = new OrbitControls(camera, canvas);
 controls.enableDamping = true
+controls.dampingFactor = 0.01;
 
-controls.minPolarAngle  = 0.6
+controls.minPolarAngle  = 0.85
 controls.maxPolarAngle  = Math.PI / 2.7
-// controls.minAzimuthAngle = 0
-// controls.maxAzimuthAngle = Math.PI / 2
+controls.minAzimuthAngle = 0.5
+controls.maxAzimuthAngle = Math.PI / 3.0
 
-controls.minZoom = 0.9
-controls.maxZoom = 1.5
+// controls.minZoom = 0.9
+// controls.maxZoom = 1.5
+controls.enableZoom = false;
 
 /**
  * Renderer
