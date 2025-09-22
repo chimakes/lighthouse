@@ -131,6 +131,8 @@ gltfLoader.load(
 
 
 const fireflies = new Fireflies()
+fireflies.points.position.x = 0.5
+fireflies.points.position.z = 1
 scene.add(fireflies.points)
 
 const water = new Water({resolution: 256, environmentMap});

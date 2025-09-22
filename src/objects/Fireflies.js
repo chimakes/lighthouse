@@ -7,7 +7,7 @@ export class Fireflies extends THREE.Mesh {
         super();
 
         this.geometry = new THREE.BufferGeometry()
-        const count = 30
+        const count = 40
         const positionArray = new Float32Array(count * 3)
         const scaleArray = new Float32Array(count)
 
