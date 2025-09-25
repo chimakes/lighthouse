@@ -9,6 +9,7 @@ import { Ground } from './objects/Ground.js'
 import { Fireflies } from './objects/Fireflies.js'
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js'
 import { DRACOLoader } from 'three/examples/jsm/loaders/DRACOLoader.js'
+import gsap from "gsap";
 
 /**
  * Base
@@ -201,11 +202,33 @@ window.addEventListener('resize', () => {
 
 // // Perspective camera
 const camera = new THREE.PerspectiveCamera(20, sizes.width / sizes.height, 0.1, 1000)
-camera.position.x = 10
-camera.position.y = 10
-camera.position.z = 10
+const cameraPosition = 10
+camera.position.x = cameraPosition
+camera.position.y = cameraPosition
+camera.position.z = cameraPosition
 
 scene.add(camera)
+
+// intro camera animation
+const t1 = gsap.timeline({
+    duration: 0.8
+})
+
+t1.fromTo(
+    camera.position,
+    {
+        x: 20,
+        y: 25,
+        z: 20,
+    },
+    {
+        x: cameraPosition,
+        y: cameraPosition,
+        z: cameraPosition,
+    }
+)
+
+
 
 // Controls
 const controls = new OrbitControls(camera, canvas);

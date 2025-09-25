@@ -46,9 +46,9 @@ export function setupUI(water, ground, fireflies, camera) {
     gui.add(fireflies.material.uniforms.uSize, 'value').min(0).max(500).step(1).name('Fireflies Size')
 
     // Camera position debug
-    gui.add(camera.position, 'x').min(-10).max(10).step(0.01).name('cameraX')
-    gui.add(camera.position, 'y').min(-10).max(10).step(0.01).name('cameraY')
-    gui.add(camera.position, 'z').min(-10).max(10).step(0.01).name('cameraZ')
+    gui.add(camera.position, 'x').min(-10).max(25).step(0.01).name('cameraX')
+    gui.add(camera.position, 'y').min(-10).max(25).step(0.01).name('cameraY')
+    gui.add(camera.position, 'z').min(-10).max(25).step(0.01).name('cameraZ')
 }
 
 export function setupGltfGUI(gltfScene){
