@@ -161,6 +161,38 @@ const sizes = {
     height: window.innerHeight
 }
 
+/**
+ * Camera
+ */
+// Perspective camera
+const camera = new THREE.PerspectiveCamera(20, sizes.width / sizes.height, 0.1, 1000)
+const cameraPosition = 10
+camera.position.x = cameraPosition
+camera.position.y = cameraPosition
+camera.position.z = cameraPosition
+
+scene.add(camera)
+
+
+// intro camera animation
+const t1 = gsap.timeline({
+    duration: 0.8
+})
+
+t1.fromTo(
+    camera.position,
+    {
+        x: 20,
+        y: 25,
+        z: 20,
+    },
+    {
+        x: cameraPosition,
+        y: cameraPosition,
+        z: cameraPosition,
+    }
+)
+
 window.addEventListener('resize', () => {
     // Update sizes
     sizes.width = window.innerWidth
@@ -182,52 +214,6 @@ window.addEventListener('resize', () => {
     // Update fireflies
     fireflies.resize()
 })
-
-/**
- * Camera
- */
-// Orthographic camera
-// const aspect = sizes.width / sizes.height;
-// const camera = new THREE.OrthographicCamera(
-//   -aspect * 3,
-//   aspect * 3,
-//   3,
-//   -3,
-//   1,
-//   1000
-// );
-// camera.position.x = 3.7
-// camera.position.y = 3.34
-// camera.position.z = 4
-
-// // Perspective camera
-const camera = new THREE.PerspectiveCamera(20, sizes.width / sizes.height, 0.1, 1000)
-const cameraPosition = 10
-camera.position.x = cameraPosition
-camera.position.y = cameraPosition
-camera.position.z = cameraPosition
-
-scene.add(camera)
-
-// intro camera animation
-const t1 = gsap.timeline({
-    duration: 0.8
-})
-
-t1.fromTo(
-    camera.position,
-    {
-        x: 20,
-        y: 25,
-        z: 20,
-    },
-    {
-        x: cameraPosition,
-        y: cameraPosition,
-        z: cameraPosition,
-    }
-)
-
 
 
 // Controls
