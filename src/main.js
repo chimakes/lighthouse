@@ -41,12 +41,58 @@ const environmentMap = cubeTextureLoader.load([
 scene.background = environmentMap;  // fills entire background
 scene.environment = environmentMap; // adds reflections
 
+/**
+ * Loading Manager
+ */
+const loadingManager = new THREE.LoadingManager()
+
+const loadingScreen = document.querySelector(".loading-screen")
+const loadingScreenButton = document.querySelector(".loading-screen-button")
+
+loadingManager.onLoad = function() {
+    loadingScreenButton.style.padding = "1rem 3rem"
+    loadingScreenButton.style.fontSize = "3rem"
+    loadingScreenButton.style.border = "8px solid #28679bff"
+    loadingScreenButton.style.borderRadius = "0.8em"
+    loadingScreenButton.style.outline = "none"
+    loadingScreenButton.style.cursor = "pointer"
+    loadingScreenButton.style.background =
+        "linear-gradient(to right, #c2dff6ff 50%, #d6ebffff 50%)"
+    loadingScreenButton.style.backgroundSize = "200% 100%"
+    loadingScreenButton.style.backgroundPosition = "right bottom"
+    loadingScreenButton.style.color = "#28679bff"
+    loadingScreenButton.style.transition =
+        "background-position 0.5s ease, transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1), color 0.3s ease"
+    loadingScreenButton.textContent = "Enter!"
+
+    // Hover in
+    loadingScreenButton.addEventListener("mouseenter", () => {
+        loadingScreenButton.style.backgroundPosition = "left bottom"
+        loadingScreenButton.style.transform = "scale(1.1)"
+        loadingScreenButton.style.color = "#28679bff"
+    })
+
+    // Hover out
+    loadingScreenButton.addEventListener("mouseleave", () => {
+        loadingScreenButton.style.backgroundPosition = "right bottom"
+        loadingScreenButton.style.transform = "scale(1)"
+        loadingScreenButton.style.color = "#28679bff"
+    })
+    
+    loadingScreenButton.addEventListener("click", (e) => {
+        loadingScreen.style.display = 'none'
+
+        startIntroCameraAnimation()
+        startBackgroundMusic()
+    })
+}
+
 // // Draco loader
 const dracoLoader = new DRACOLoader()
 dracoLoader.setDecoderPath('draco/')
 
 // GLTF loader
-const gltfLoader = new GLTFLoader()
+const gltfLoader = new GLTFLoader(loadingManager)
 gltfLoader.setDRACOLoader(dracoLoader)
 
 /**
@@ -175,23 +221,49 @@ scene.add(camera)
 
 
 // intro camera animation
-const t1 = gsap.timeline({
-    duration: 0.8
-})
+function startIntroCameraAnimation(){
+    const t1 = gsap.timeline({
+        duration: 0.8
+    })
 
-t1.fromTo(
-    camera.position,
-    {
-        x: 20,
-        y: 25,
-        z: 20,
-    },
-    {
-        x: cameraPosition,
-        y: cameraPosition,
-        z: cameraPosition,
-    }
-)
+    t1.fromTo(
+        camera.position,
+        {
+            x: 20,
+            y: 25,
+            z: 20,
+        },
+        {
+            x: cameraPosition,
+            y: cameraPosition,
+            z: cameraPosition,
+            duration: 2,
+            ease: "power1.inOut"
+        }
+    )
+}
+
+
+
+/**
+ * Background Music
+ */
+function startBackgroundMusic(){
+    const listener = new THREE.AudioListener()
+    camera.add(listener)
+
+    const audioLoader = new THREE.AudioLoader()
+
+    const backgroundSound = new THREE.Audio(listener)
+
+    audioLoader.load('sounds/seagull_and_wave.mp3', function(buffer) {
+        backgroundSound.setBuffer(buffer)
+        backgroundSound.setLoop(true)
+        backgroundSound.setVolume(0.5)
+
+        backgroundSound.play()
+    })
+}
 
 window.addEventListener('resize', () => {
     // Update sizes
