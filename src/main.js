@@ -57,7 +57,7 @@ loadingManager.onLoad = function() {
     loadingScreenButton.style.outline = "none"
     loadingScreenButton.style.cursor = "pointer"
     loadingScreenButton.style.background =
-        "linear-gradient(to right, #c2dff6ff 50%, #d6ebffff 50%)"
+        "linear-gradient(to right, #f1f8d5ff 50%, #d6ebffff 50%)"
     loadingScreenButton.style.backgroundSize = "200% 100%"
     loadingScreenButton.style.backgroundPosition = "right bottom"
     loadingScreenButton.style.color = "#28679bff"

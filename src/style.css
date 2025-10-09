@@ -40,26 +40,13 @@ body
 .loading-screen-button {
     padding: 1rem 3rem;
     font-size: 3rem;
+    font-family: 'Fredoka', sans-serif;
+    font-weight: 500;
     background-color: transparent;
     outline: none;
     color: #fdfeff;
     border-radius: 0.8em;
     border: none;
+    letter-spacing: 0.05em;
 }
-
-/* .loading-screen-button {
-  padding: 1rem 3rem;
-  font-size: 3rem;
-  background: linear-gradient(to right, #bee0ff 50%, #D80286 50%);
-  background-size: 200% 100%;
-  background-position: right bottom;
-  outline: none;
-  color: #28679bff;
-  border-radius: 0.8em;
-  border: 8px solid #28679bff;
-  transition:
-    background-position 0.5s ease,
-    transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
-  cursor: pointer;
-} */
 
