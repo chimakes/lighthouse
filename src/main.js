@@ -69,14 +69,12 @@ loadingManager.onLoad = function() {
     loadingScreenButton.addEventListener("mouseenter", () => {
         loadingScreenButton.style.backgroundPosition = "left bottom"
         loadingScreenButton.style.transform = "scale(1.1)"
-        loadingScreenButton.style.color = "#28679bff"
     })
 
     // Hover out
     loadingScreenButton.addEventListener("mouseleave", () => {
         loadingScreenButton.style.backgroundPosition = "right bottom"
         loadingScreenButton.style.transform = "scale(1)"
-        loadingScreenButton.style.color = "#28679bff"
     })
     
     loadingScreenButton.addEventListener("click", (e) => {

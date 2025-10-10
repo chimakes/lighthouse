@@ -34,7 +34,7 @@ body
     background-color: #9fcffb;  
     display: flex;
     justify-content: center; 
-    align-items: center;     
+    align-items: center;
 }
 
 .loading-screen-button {
@@ -48,5 +48,20 @@ body
     border-radius: 0.8em;
     border: none;
     letter-spacing: 0.05em;
+    z-index: 11;
 }
 
+.wave {
+    position: absolute;
+    bottom: -10vh;
+    left: 0;
+    width: 100%;
+    height: auto;
+    z-index: 10;
+}
+
+.wave svg {
+    width: 100%;
+    height: auto;
+    display: block;
+}

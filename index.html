@@ -12,8 +12,47 @@
       <button class="loading-screen-button">
         Loading...
       </button>
-    </div>
+      <div class="wave">
+        <!-- svg no animation -->
+        <!-- <svg width="805" height="540" viewBox="0 0 805 540" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <g id="wave" clip-path="url(#clip0_2_5)">
+        <path id="Vector" d="M-125 431L-107.2 427.8C-89.3 424.7 -53.7 418.3 -18.2 423.7C17.3 429 52.7 446 88.2 442.5C123.7 439 159.3 415 195 404.7C230.7 394.3 266.3 397.7 301.8 409.8C337.3 422 372.7 443 408.2 444.3C443.7 445.7 479.3 427.3 515 424.3C550.7 421.3 586.3 433.7 621.8 435C657.3 436.3 692.7 426.7 728.2 426C763.7 425.3 799.3 433.7 817.2 437.8L835 442V541H817.2C799.3 541 763.7 541 728.2 541C692.7 541 657.3 541 621.8 541C586.3 541 550.7 541 515 541C479.3 541 443.7 541 408.2 541C372.7 541 337.3 541 301.8 541C266.3 541 230.7 541 195 541C159.3 541 123.7 541 88.2 541C52.7 541 17.3 541 -18.2 541C-53.7 541 -89.3 541 -107.2 541H-125V431Z" fill="#28679B"/>
+        </g>
+        </svg> -->
 
+
+        <!-- svg animation lower -->
+        <!-- <svg viewBox="0 0 1440 320" class="wave">
+        <path d="M0,160 C480,200 960,120 1440,160 L1440,320 L0,320Z" fill="#28679B">
+          <animate
+            attributeName="d"
+            dur="6s"
+            repeatCount="indefinite"
+            values="
+              M0,160 C480,200 960,120 1440,160 L1440,320 L0,320Z;
+              M0,180 C480,140 960,180 1440,120 L1440,320 L0,320Z;
+              M0,160 C480,200 960,120 1440,160 L1440,320 L0,320Z
+            "
+          />
+        </path>
+        </svg> -->
+
+        <svg viewBox="0 0 960 540" xmlns="http://www.w3.org/2000/svg" class="wave">
+          <path fill="#28679B">
+            <animate
+              attributeName="d"
+              dur="6s"
+              repeatCount="indefinite"
+              values="
+                M0,400 Q240,350 480,400 T960,400 V540 H0 Z;
+                M0,420 Q240,370 480,420 T960,420 V540 H0 Z;
+                M0,400 Q240,350 480,400 T960,400 V540 H0 Z
+              "
+            />
+          </path>
+        </svg>
+      </div>
+    </div>
     <canvas class="webgl"></canvas>
     <script type="module" src="/src/main.js"></script>
   </body>
