@@ -3,7 +3,6 @@ import "./style.css"
 import { setupUI } from './ui.js';
 import { setupGltfGUI } from './ui.js';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js'
-import { Sky } from 'three/addons/objects/Sky.js';
 import { Water } from './objects/Water.js'
 import { Ground } from './objects/Ground.js'
 import { Fireflies } from './objects/Fireflies.js'

@@ -37,7 +37,7 @@ export class Water extends THREE.Mesh {
             transparent:true
         })
 
-        this.geometry = new THREE.PlaneGeometry(50, 50, 
+        this.geometry = new THREE.PlaneGeometry(100, 100, 
             options.resolution, options.resolution)
         this.rotation.x = - Math.PI / 2;
     }
